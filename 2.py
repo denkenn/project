@@ -77,8 +77,8 @@ def make_train_step(model, loss_fn, optimizer):
 # Обучаем модель, считаем потери при тренировке и при проверке
 for epoch in range(n_epochs):
   
-    #losses = []
-    #val_losses = []
+    losses = []
+    val_losses = []
 
     for x_batch, y_batch in train_loader:
         x_batch = x_batch.to(device)
@@ -86,9 +86,7 @@ for epoch in range(n_epochs):
         yhat = a + b * x_batch + c * x_batch**2
         error = y_batch - yhat
         loss = (sum(error**2))**(1/2)
-        #loss = (error**2).mean()
         loss.backward()
-        #print(a.grad, b.grad, c.grad)
         with torch.no_grad():
             a -= lr*a.grad
             b -= lr*b.grad
@@ -109,7 +107,6 @@ for epoch in range(n_epochs):
             yhat = a + b * x_val + c * x_val ** 2
             error = y_val - yhat
             val_loss = (sum(error ** 2)) ** (1 / 2)
-            #val_loss = (error**2).mean()
             val_losses.append(val_loss.item())
 
     print("Epoch:" + str(epoch) + " Training loss: " + str(np.mean(losses)) + " Val loss: + "+ str(np.mean(val_losses)))
